@@ -1,15 +1,17 @@
-import { FC, useState } from "react";
+import React, { FC, useState, ChangeEvent, FormEvent } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux";
 import { deleteTodo, onEditTodo, onStatusChange } from "../../redux/todoSlice";
 import { TodoType } from "../../types";
 import css from "./Todo.module.css";
 
+
 const Todo: FC<TodoType> = (props) => {
   const [isEdit, setEdit] = useState(false);
-  const [inputValue, setInputValue] = useState(props.title);
+  const [inputValue, setInputValue] = useState<string>(props.title);
 
   const dispatch = useDispatch<AppDispatch>();
+
   const handleEdit = () => {
     setEdit(!isEdit);
   };
@@ -22,11 +24,11 @@ const Todo: FC<TodoType> = (props) => {
     dispatch(onStatusChange(props.id));
   };
 
-  const handleInput = (e) => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  const submit = (e) => {
+  const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(onEditTodo({ id: props.id, inputValue }));
     setEdit(false);
@@ -42,7 +44,9 @@ const Todo: FC<TodoType> = (props) => {
             onChange={handleInput}
             type="text"
           />
-          <button className="editBtn">Save</button>
+          <button className="editBtn" type="submit">
+            Save
+          </button>
         </form>
       ) : (
         <label>
